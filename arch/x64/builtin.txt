@@ -1,0 +1,1 @@
+acpi blocklist boot chain configfile cpio echo exfat fat fb getargs getkey gzio iso9660 loadenv loopback ls lzopio map memdisk minicmd newc normal ntboot ntfs part_gpt part_msdos progress  regexp sbpolicy search tar terminal terminfo test udf version vhd wimboot xzio

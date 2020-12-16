@@ -1,0 +1,17 @@
+hilsonma 发表于 2019-12-28 16:12
+感谢指点。
+
+还要请教一下怎样封装成efi文件，是使用-c 数将cfg 作为内置配置文件来buid一个efi文件吗 ...
+
+写了个原型
+ run.tar.gz (965.66 KB, 下载次数: 3)
+ run.efi.tar.gz (1.25 MB, 下载次数: 3)
+由于我的系统是Linux，脚本都是bash，你可以参考着改成批处理。
+生成的run.efi可以在grub2里面使用，用来启动 iso wim vhd efi
+chainloader /run.efi file=(hd0,2)/wepe64.iso
+chainloader /run.efi file=(hd0,2)/wepe64.iso mem
+
+chainloader /run.efi file=(hd1,1)/win10.vhd
+chainloader /run.efi file=(hd0,2)/boot.wim
+加mem表示加载到内存
+启动中途会暂停，用于查看一些信息，按回车继续

@@ -18,7 +18,7 @@ set pager=0;
 set debug=off;
 set color_normal=white/black;
 set color_highlight=black/white;
-
+source $prefix/search.sh;
 version;
 echo "cmdline: ${grub_cmdline}";
 

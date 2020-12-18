@@ -12,5 +12,5 @@ cd build
 find ./boot | cpio -o -H newc > ./memdisk.cpio
 cd ..
 modules=$(cat arch/x64/builtin.txt)
-grub-mkimage -m ./build/memdisk.cpio -d ./grub/x86_64-efi -p "(memdisk)/boot/grub" -c arch/x64/config.cfg -o grub2toy.efi -O x86_64-efi $modules
+grub-mkimage -m ./build/memdisk.cpio -d ./grub/x86_64-efi -p "(memdisk)/boot/grub" -c arch/x64/config.cfg -o grub2toy.efi -O x86_64-efi $modules tftp http net efinet probe
 rm -rf build

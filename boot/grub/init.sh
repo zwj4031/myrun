@@ -15,81 +15,58 @@
 # along with Grub2-FileManager.  If not, see <http://www.gnu.org/licenses/>.
 
 set pager=0;
-set debug=off;
-set color_normal=white/black;
-set color_highlight=black/white;
-source $prefix/search.sh;
-version;
-echo "cmdline: ${grub_cmdline}";
-
-#UEFI LoadOptions
-getargs --value "file" run_file;
-getargs --key "mem" run_mem;
-echo "file: ${run_file}";
-echo "mem: ${run_mem}"
-if [ "${run_mem}" = "1" ];
+cat --set=modlist ${prefix}/insmod.lst;
+for module in ${modlist};
+do
+  insmod ${module};
+done;
+export enable_progress_indicator=0;
+export grub_secureboot="Not available";
+if [ "${grub_platform}" = "efi" ];
 then
-  set run_mem="--mem";
-else
-  set run_mem="";
+  search -s -f -q /efi/microsoft/boot/bootmgfw.efi;
+  if [ "${grub_cpu}" = "i386" ];
+  then
+    set EFI_ARCH="ia32";
+  elif [ "${grub_cpu}" = "arm64" ];
+  then
+    set EFI_ARCH="aa64";
+  else
+    set EFI_ARCH="x64";
+  fi;
+  source ${prefix}/pxeinit.sh;
+  net_detect;
+fi
+search --no-floppy --fs-uuid --set=ipxevd f00d-f00d;
+
+
+if [ -f "($ipxevd)/mapiso" ];
+then
+  map /boot.iso;
 fi;
-getkey;
+if [ -f "($ipxevd)/mapisomem" ];
+then
+  getkey;
+    map --mem /boot.iso
+fi;	
 
-#function installwin {
-#  set installiso=string.gsub ($2, "/", "\\\\");
-#  save_env -f ${prefix}/install/envblk installiso;
-#  cat ${prefix}/install/envblk;
-#  wimboot @:bootmgfw.efi:${prefix}/ms/bootmgfw.efi \
-#          @:bcd:${prefix}/ms/bcd \
-#          @:boot.sdi:${prefix}/ms/boot.sdi \
-#          @:null.cfg:${prefix}/install/envblk \
-#          @:mount.exe:${prefix}/install/mount.exe \
-#          @:start.bat:${prefix}/install/start.bat \
-#          @:winpeshl.ini:${prefix}/install/winpeshl.ini \
-#          @:boot.wim:"${1}";
-#}
+if [ -f "($ipxevd)/mapvhd" ];
+then
 
-regexp --set=1:run_ext '^.*\.(.*$)' "${run_file}";
-echo "type: ${run_ext}";
-if regexp '^[eE][fF][iI]$' "${run_ext}";
+    map --type=hd /boot.vhd;
+fi;	
+if [ -f "($ipxevd)/mapvhdmem" ];
 then
-  chainloader -b "${run_file}";
-elif regexp '^[iI][mM][aAgG]$' "${run_ext}";
-then
-  map ${run_mem} "${run_file}";
-elif regexp '^[iI][sS][oO]$' "${run_ext}";
-then
-# loopback loop "${run_file}";
-# set win_prefix=(loop)/sources/install;
-# set win64_prefix=(loop)/x64/sources/install;
-# if [ -f ${win_prefix}.wim -o -f ${win_prefix}.esd -o -f ${win_prefix}.swm ];
-# then
-#   installwin "(loop)/sources/boot.wim" "${run_file}";
-# elif [ -f ${win64_prefix}.wim -o -f ${win64_prefix}.esd -o -f ${win64_prefix}.swm ];
-# then
-#   installwin "(loop)/x64/sources/boot.wim" "${run_file}";
-# fi;
-  map ${run_mem} "${run_file}";
-elif regexp '^[vV][hH][dD]$' "${run_ext}";
-then
-  ntboot --gui \
-         --efi=${prefix}/ms/bootmgfw.efi \
-         --sdi=${prefix}/ms/boot.sdi \
-         "${run_file}";
-elif regexp '^[vV][hH][dD][xX]$' "${run_ext}";
-then
-  ntboot --gui \
-         --efi=${prefix}/ms/bootmgfw.efi \
-         --sdi=${prefix}/ms/boot.sdi \
-         "${run_file}";
-elif regexp '^[wW][iI][mM]$' "${run_ext}";
-then
-  wimboot --gui \
-          @:bootmgfw.efi:${prefix}/ms/bootmgfw.efi \
-          @:bcd:${prefix}/ms/bcd \
-          @:boot.sdi:${prefix}/ms/boot.sdi \
-          @:boot.wim:"${run_file}";
-else
-  echo "ERROR: Unsupported file";
-  exit;
+    map --mem --type=hd /boot.vhd;	
+	
 fi;
+if [ -f "($ipxevd)/mapxz" ];
+then
+    map --type=hd /boot.xz;	
+fi;
+if [ -f "($ipxevd)/mapxzmem" ];
+then
+   map --mem --type=hd /boot.xz;	
+ fi;
+boot;
+

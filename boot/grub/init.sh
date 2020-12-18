@@ -15,11 +15,11 @@
 # along with Grub2-FileManager.  If not, see <http://www.gnu.org/licenses/>.
 
 set pager=0;
-cat --set=modlist ${prefix}/insmod.lst;
-for module in ${modlist};
-do
-  insmod ${module};
-done;
+#cat --set=modlist ${prefix}/insmod.lst;
+#for module in ${modlist};
+#do
+#  insmod ${module};
+#done;
 export enable_progress_indicator=0;
 export grub_secureboot="Not available";
 if [ "${grub_platform}" = "efi" ];
@@ -38,47 +38,48 @@ then
   net_detect;
 fi
 search --no-floppy --fs-uuid --set=ipxevd f00d-f00d;
+efiload $prefix/ntfs_x64.efi;
 
 #iso
 if [ -f "($ipxevd)/mapiso" ];
 then
-  map /boot.iso;
+  map ($ipxevd)/boot.iso;
 fi;
 if [ -f "($ipxevd)/mapisomem" ];
 then
-   map --mem /boot.iso
+   map --mem ($ipxevd)/boot.iso
 fi;	
 
 #vhd
 if [ -f "($ipxevd)/mapvhd" ];
 then
-    map --type=hd /boot.vhd;
+    map --type=hd ($ipxevd)/boot.vhd;
 fi;	
 if [ -f "($ipxevd)/mapvhdmem" ];
 then
-    map --mem --type=hd /boot.vhd;	
+    map --mem --type=hd ($ipxevd)/boot.vhd;	
 	
 fi;
 
 #xz
 if [ -f "($ipxevd)/mapxz" ];
 then
-    map --type=hd /boot.xz;	
+    map --type=hd ($ipxevd)/boot.xz;	
 fi;
 if [ -f "($ipxevd)/mapxzmem" ];
 then
-    map --mem --type=hd /boot.xz;	
+    map --mem --type=hd ($ipxevd)/boot.xz;	
 fi;
 
 
 #ramos
 if [ -f "($ipxevd)/mapramos" ];
 then
-   map --type=hd /boot.ramos;	
+   map --type=hd ($ipxevd)/boot.ramos;	
 fi;
 if [ -f "($ipxevd)/mapramosmem" ];
 then
-   map --mem --type=hd /boot.ramos;	
+   map --mem --type=hd ($ipxevd)/boot.ramos;	
 fi;
 boot;
 

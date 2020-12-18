@@ -39,20 +39,19 @@ then
 fi
 search --no-floppy --fs-uuid --set=ipxevd f00d-f00d;
 
-
+#iso
 if [ -f "($ipxevd)/mapiso" ];
 then
   map /boot.iso;
 fi;
 if [ -f "($ipxevd)/mapisomem" ];
 then
-  getkey;
-    map --mem /boot.iso
+   map --mem /boot.iso
 fi;	
 
+#vhd
 if [ -f "($ipxevd)/mapvhd" ];
 then
-
     map --type=hd /boot.vhd;
 fi;	
 if [ -f "($ipxevd)/mapvhdmem" ];
@@ -60,13 +59,27 @@ then
     map --mem --type=hd /boot.vhd;	
 	
 fi;
+
+#xz
 if [ -f "($ipxevd)/mapxz" ];
 then
     map --type=hd /boot.xz;	
 fi;
 if [ -f "($ipxevd)/mapxzmem" ];
 then
-   map --mem --type=hd /boot.xz;	
- fi;
+    map --mem --type=hd /boot.xz;	
+fi;
+
+
+#ramos
+if [ -f "($ipxevd)/mapramos" ];
+then
+   map --type=hd /boot.ramos;	
+fi;
+if [ -f "($ipxevd)/mapramosmem" ];
+then
+   map --mem --type=hd /boot.ramos;	
+fi;
 boot;
+
 

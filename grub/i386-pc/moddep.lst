@@ -188,7 +188,6 @@ ufs1_be:
 truecrypt: video boot relocator mmap gzio
 getkey: lua extcmd read
 archelp:
-fdlibm:
 nttools:
 grubfm: conv sortlib font extcmd normal video gfxmenu ini
 ntldr: chain video boot relocator

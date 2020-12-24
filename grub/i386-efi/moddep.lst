@@ -295,6 +295,7 @@ ufs2:
 time:
 setpci: extcmd
 gptsync: disk
+xhci: usb
 search_label:
 efienv: loadenv
 setjmp:

@@ -10,6 +10,7 @@
 *clear_menu: normal
 *cmp: cmp
 *cpuid: cpuid
+*cputemp: cpuid
 *crc: hashsum
 *cryptomount: cryptodisk
 *date: date
@@ -245,6 +246,7 @@ time: time
 touch: fatfs
 true: true
 truecrypt: truecrypt
+type: alias
 umount: fatfs
 unalias: alias
 usb: usbtest

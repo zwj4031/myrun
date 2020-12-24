@@ -204,6 +204,7 @@ testload: testload
 time: time
 touch: fatfs
 true: true
+type: alias
 umount: fatfs
 unalias: alias
 version: version

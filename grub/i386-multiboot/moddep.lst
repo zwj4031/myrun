@@ -275,6 +275,7 @@ ufs2:
 time:
 setpci: extcmd pci
 gptsync: disk
+xhci: usb pci
 search_label:
 setjmp:
 multiboot2: net linux smbios boot relocator mmap acpi

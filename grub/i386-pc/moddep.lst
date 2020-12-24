@@ -290,6 +290,7 @@ time:
 setpci: extcmd pci
 gptsync: disk
 freedos: chain video boot relocator
+xhci: usb pci
 search_label:
 setjmp:
 multiboot2: net linux vbe smbios video boot relocator mmap lsapm acpi

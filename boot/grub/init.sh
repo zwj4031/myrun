@@ -44,12 +44,12 @@ efiload $prefix/ntfs_x64.efi;
 if [ -f "($ipxevd)/mapiso" ];
 then
  echo mapiso......;
-  map ($ipxevd)/boot.iso;
+  map -f ($ipxevd)/boot.iso;
 fi;
 if [ -f "($ipxevd)/mapisomem" ];
 then
  echo mapisomem....;
-   map --mem ($ipxevd)/boot.iso
+   map --mem -f --rt ($ipxevd)/boot.iso
 fi;	
 
 #vhd

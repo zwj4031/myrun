@@ -41,10 +41,39 @@ search --no-floppy --fs-uuid --set=ipxevd f00d-f00d;
 efiload $prefix/ntfs_x64.efi;
 
 #iso
+if [ -f "($ipxevd)/mapisort" ];
+then
+ echo mapiso --rt......;
+  map -f -rt ($ipxevd)/boot.iso;
+fi;
+
+if [ -f "($ipxevd)/mapisomemrt" ];
+then
+ echo mapisomem --rt....;
+   map --mem -f --rt ($ipxevd)/boot.iso
+fi;	
+
 if [ -f "($ipxevd)/mapiso" ];
 then
  echo mapiso......;
-  map -f ($ipxevd)/boot.iso;
+  map -f -g ($ipxevd)/boot.iso;
+fi;
+
+if [ -f "($ipxevd)/mapisomem" ];
+then
+ echo mapisomem....;
+   map --mem -f -g ($ipxevd)/boot.iso
+fi;	
+
+#vhd
+if [ -f "($ipxevd)/mapvhd" ];
+then
+    map --type=hd ($ipxevd)/boot.vhd;
+fi;	
+if [ -f "($ipxevd)/mapvhdmem" ];
+then
+    map --mem --type=hd ($ipxevd)/boot.vhd;	
+	
 fi;
 if [ -f "($ipxevd)/mapisomem" ];
 then

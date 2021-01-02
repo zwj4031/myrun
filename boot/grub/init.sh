@@ -112,6 +112,12 @@ if [ -f "($ipxevd)/mapramosmem" ];
 then
    map --mem --type=hd ($ipxevd)/boot.ramos;	
 fi;
+
+#ctos
+if [ -f "($ipxevd)/ctos.sh" ];
+then
+   configfiles ($ipxevd)/ctos.sh;	
+fi;
 boot;
 
 

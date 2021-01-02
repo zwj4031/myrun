@@ -38,7 +38,7 @@ then
   net_detect;
 fi
 search --no-floppy --fs-uuid --set=ipxevd f00d-f00d;
-efiload $prefix/ntfs_x64.efi;
+#efiload $prefix/ntfs_x64.efi;
 
 #iso
 if [ -f "($ipxevd)/mapisort" ];
@@ -114,9 +114,9 @@ then
 fi;
 
 #ctos
-if [ -f "($ipxevd)/ctos.sh" ];
+if [ -f "($ipxevd)/ctos" ];
 then
-   configfiles ($ipxevd)/ctos.sh;	
+   configfile ($ipxevd)/ctos.sh;	
 fi;
 boot;
 

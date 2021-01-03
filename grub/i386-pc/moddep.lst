@@ -197,7 +197,7 @@ search_part_uuid: gpt
 raid6rec: diskfilter
 minix2:
 mda_text:
-lsacpi: extcmd acpi
+fixed_vdi:
 datehook: datetime
 loadenv: disk extcmd
 bitmap_scale: bitmap
@@ -216,6 +216,7 @@ relocator: mmap
 acpi: extcmd procfs mmap
 tga: bufio bitmap
 reboot: halt extcmd
+geometry: extcmd
 serial: extcmd terminfo
 zfscrypt: crypto pbkdf2 zfs extcmd gcry_sha1 gcry_rijndael
 dm_nv: diskfilter

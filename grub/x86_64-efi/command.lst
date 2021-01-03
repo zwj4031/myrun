@@ -60,7 +60,7 @@
 *loadfile: memrw
 *loopback: loopback
 *ls: ls
-*lsacpi: lsacpi
+*lsacpi: acpi
 *lspci: lspci
 *lua: lua
 *map: map

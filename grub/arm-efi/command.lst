@@ -51,7 +51,7 @@
 *loadfile: memrw
 *loopback: loopback
 *ls: ls
-*lsacpi: lsacpi
+*lsacpi: acpi
 *lua: lua
 *map: map
 *md5sum: hashsum

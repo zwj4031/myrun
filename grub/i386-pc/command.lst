@@ -22,6 +22,7 @@
 *extract_syslinux_entries_source: syslinuxcfg
 *file: file
 *functional_test: functional_test
+*geometry: geometry
 *getkey: getkey
 *gettext: gettext
 *gptprio.next: gptprio
@@ -52,7 +53,7 @@
 *loadfile: memrw
 *loopback: loopback
 *ls: ls
-*lsacpi: lsacpi
+*lsacpi: acpi
 *lspci: lspci
 *lua: lua
 *map: map

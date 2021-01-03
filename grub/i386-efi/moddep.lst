@@ -199,7 +199,7 @@ search_part_uuid: gpt
 raid6rec: diskfilter
 lsefisystab:
 minix2:
-lsacpi: extcmd acpi
+fixed_vdi:
 datehook: datetime
 loadenv: disk extcmd
 bitmap_scale: bitmap

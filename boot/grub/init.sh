@@ -22,6 +22,54 @@ set pager=0;
 #done;
 export enable_progress_indicator=0;
 export grub_secureboot="Not available";
+#run模块
+echo "cmdline: ${grub_cmdline}";
+#UEFI LoadOptions
+getargs --value "file" run_file;
+getargs --key "mem" run_mem;
+echo "file: ${run_file}";
+echo "mem: ${run_mem}"
+if [ "${run_mem}" = "1" ];
+then
+  set run_mem="--mem";
+else
+  set run_mem="";
+fi;
+getkey;
+
+regexp --set=1:run_ext '^.*\.(.*$)' "${run_file}";
+echo "type: ${run_ext}";
+if regexp '^[eE][fF][iI]$' "${run_ext}";
+then
+  chainloader -b "${run_file}";
+elif regexp '^[iI][mM][aAgG]$' "${run_ext}";
+then
+  map ${run_mem} "${run_file}";
+elif regexp '^[iI][sS][oO]$' "${run_ext}";
+then
+  map ${run_mem} "${run_file}";
+elif regexp '^[vV][hH][dD]$' "${run_ext}";
+then
+  ntboot --gui \
+         --efi=${prefix}/ms/bootmgfw.efi \
+          "${run_file}";
+elif regexp '^[vV][hH][dD][xX]$' "${run_ext}";
+then
+  ntboot --gui \
+         --efi=${prefix}/ms/bootmgfw.efi \
+          "${run_file}";
+elif regexp '^[wW][iI][mM]$' "${run_ext}";
+then
+  wimboot --gui \
+          @:bootmgfw.efi:${prefix}/ms/bootmgfw.efi \
+          @:boot.wim:"${run_file}";
+else
+  echo "ERROR: Unsupported file";
+  exit;
+fi;
+#run模块结束
+
+
 if [ "${grub_platform}" = "efi" ];
 then
   search -s -f -q /efi/microsoft/boot/bootmgfw.efi;

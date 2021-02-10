@@ -1,7 +1,7 @@
 videotest: gfxmenu
+setkey: extcmd
 odc: archelp
 loopback: extcmd
-setkey: extcmd
 macho:
 ini: lua extcmd
 gcry_des: crypto
@@ -35,7 +35,7 @@ jfs:
 help: extcmd normal
 configfile: normal
 cbls: cbtable
-map: uuid extcmd boot relocator mmap
+map: uuid extcmd normal boot relocator mmap
 gfxterm_menu: functional_test procfs normal
 gcry_idea: crypto
 tr: extcmd

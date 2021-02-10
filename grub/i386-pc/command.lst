@@ -104,6 +104,7 @@
 *verify_detached: pgp
 *vhd: loopback
 *videomode: videoinfo
+*vt_acpi: map
 *wimboot: wimboot
 *wimtools: wimboot
 *zfskey: zfscrypt

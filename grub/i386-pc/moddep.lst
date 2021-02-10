@@ -1,7 +1,7 @@
 videotest: font video gfxmenu
+setkey: extcmd
 odc: archelp
 loopback: extcmd
-setkey: extcmd
 macho:
 ini: lua extcmd
 gcry_des: crypto
@@ -12,8 +12,8 @@ part_gpt:
 conv: lua extcmd
 romfs: fshelp
 read: normal
-gcry_arcfour: crypto
 aout:
+gcry_arcfour: crypto
 vga_text:
 tftp: net
 newc: extcmd archelp
@@ -36,7 +36,7 @@ jfs:
 help: extcmd normal
 configfile: normal
 cbls: cbtable
-map: uuid extcmd boot relocator mmap
+map: uuid extcmd normal boot relocator mmap acpi
 gfxterm_menu: font functional_test procfs normal video_fb
 gcry_idea: crypto
 tr: extcmd

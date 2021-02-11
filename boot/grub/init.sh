@@ -143,6 +143,7 @@ getargs --key "rt" run_rt;
 echo "file: ${run_file}";
 echo "mem: ${run_mem}"
 echo "rt: ${run_rt}"
+
 if [ "${run_mem}" = "1" ];
 then
   set run_mem="--mem";
@@ -185,7 +186,7 @@ then
           @:boot.wim:"${run_file}";
 else
   echo "ERROR: Unsupported file";
-  exit;
+
 fi;
 #run模块结束
 

@@ -42,6 +42,15 @@ fi
 search --no-floppy --fs-uuid --set=ipxevd f00d-f00d;
 #efiload $prefix/ntfs_x64.efi;
 
+
+#bootlocal
+if [ -f "($ipxevd)/bootlocal" ];
+then
+  search -s -f -q /efi/microsoft/boot/bootmgfw.efi;
+  chainloader /efi/microsoft/boot/bootmgfw.efi;
+
+fi;
+
 #iso
 if [ -f "($ipxevd)/mapisort" ];
 then

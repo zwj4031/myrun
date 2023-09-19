@@ -24,7 +24,7 @@ videotest_checksum: font functional_test video_fb
 password_pbkdf2: crypto gcry_sha512 pbkdf2 normal
 gcry_seed: crypto
 pcidump: extcmd pci
-bsd: elf serial crypto gcry_md5 verifiers extcmd vbe video boot aout cpuid relocator mmap
+bsd: elf serial crypto gcry_md5 extcmd vbe video boot aout cpuid relocator mmap
 version:
 sfs: fshelp
 reiserfs: fshelp
@@ -94,17 +94,16 @@ gfxterm_background: video_colors bitmap_scale gfxterm extcmd video bitmap
 search_fs_uuid:
 gcry_dsa: pgp mpi
 keystatus: extcmd
-linux: verifiers normal vbe video boot relocator mmap
+linux: normal vbe video boot relocator mmap
 geli: cryptodisk crypto gcry_sha512 pbkdf2 gcry_sha256
 cmdline_cat_test: font functional_test procfs normal video_fb
 rdmsr: extcmd
 part_sun:
 cbtable:
-plan9: verifiers extcmd video boot relocator
+plan9: extcmd video boot relocator
 sendkey: extcmd boot
 pbkdf2_test: functional_test pbkdf2 gcry_sha1
 video_bochs: video pci video_fb
-verifiers:
 bufio:
 usbserial_ftdi: serial usb usbserial_common
 legacy_password_test: functional_test legacycfg
@@ -278,9 +277,8 @@ partnew: disk extcmd
 linux16: linux video boot relocator mmap
 cat: extcmd
 ahci: ata boot pci
-pgp: crypto verifiers extcmd mpi gcry_sha1
-normal: net terminal crypto verifiers bufio datetime extcmd boot gettext
-lzmaio:
+pgp: crypto extcmd mpi gcry_sha1
+normal: net terminal crypto bufio datetime extcmd boot gettext
 ufs1:
 mdraid09: diskfilter
 lvm: diskfilter

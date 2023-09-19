@@ -83,13 +83,12 @@ gfxterm_background: video_colors bitmap_scale gfxterm extcmd video bitmap
 search_fs_uuid:
 gcry_dsa: pgp mpi
 keystatus: extcmd
-linux: verifiers boot fdt
+linux: boot fdt
 geli: cryptodisk crypto gcry_sha512 pbkdf2 gcry_sha256
 cmdline_cat_test: font functional_test procfs normal video_fb
 part_sun:
 pbkdf2_test: functional_test pbkdf2 gcry_sha1
 sbpolicy: extcmd
-verifiers:
 bufio:
 lua: setjmp extcmd datetime normal mmap
 blscfg: extcmd normal
@@ -109,7 +108,7 @@ xnu_uuid: gcry_md5
 mul_test: functional_test
 adler32: crypto
 terminal:
-shim_lock: verifiers
+shim_lock:
 crypto:
 part_bsd: part_msdos
 luks2: cryptodisk crypto json afsplitter pbkdf2
@@ -138,7 +137,7 @@ strtoull_test: functional_test
 bitmap:
 ntfs: fshelp
 wimboot: lua map extcmd normal procfs xzio
-tpm: verifiers
+tpm:
 gcry_crc: crypto
 efiload: extcmd
 png: bufio bitmap
@@ -233,9 +232,8 @@ qnx6: fshelp
 scsi:
 partnew: disk extcmd
 cat: extcmd
-pgp: crypto verifiers extcmd mpi gcry_sha1
-normal: net terminal crypto verifiers bufio datetime extcmd boot gettext
-lzmaio:
+pgp: crypto extcmd mpi gcry_sha1
+normal: net terminal crypto bufio datetime extcmd boot gettext
 ufs1:
 mdraid09: diskfilter
 lvm: diskfilter

@@ -23,7 +23,7 @@ videotest_checksum: functional_test
 password_pbkdf2: crypto gcry_sha512 pbkdf2 normal
 gcry_seed: crypto
 pcidump: extcmd pci
-bsd: elf serial crypto gcry_md5 verifiers extcmd boot aout cpuid relocator mmap
+bsd: elf serial crypto gcry_md5 extcmd boot aout cpuid relocator mmap
 version:
 sfs: fshelp
 reiserfs: fshelp
@@ -90,7 +90,7 @@ gfxterm_background: video_colors bitmap_scale extcmd bitmap
 search_fs_uuid:
 gcry_dsa: pgp mpi
 keystatus: extcmd
-linux: verifiers boot relocator mmap
+linux: boot relocator mmap
 geli: cryptodisk crypto gcry_sha512 pbkdf2 gcry_sha256
 cmdline_cat_test: functional_test procfs normal
 rdmsr: extcmd
@@ -99,7 +99,6 @@ cbtable:
 sendkey: extcmd boot
 pbkdf2_test: functional_test pbkdf2 gcry_sha1
 video_bochs: pci
-verifiers:
 usbserial_ftdi: serial usb usbserial_common
 lua: setjmp extcmd datetime normal mmap
 cpuid: extcmd
@@ -264,9 +263,8 @@ partnew: disk extcmd
 linux16: linux boot relocator mmap
 cat: extcmd
 ahci: ata boot pci
-pgp: crypto verifiers extcmd mpi gcry_sha1
-normal: net terminal crypto verifiers datetime extcmd boot gettext
-lzmaio:
+pgp: crypto extcmd mpi gcry_sha1
+normal: net terminal crypto datetime extcmd boot gettext
 ufs1:
 mdraid09: diskfilter
 lvm: diskfilter

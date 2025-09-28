@@ -92,19 +92,19 @@ then
   
   if search --set=user -f -q /efi/microsoft/boot/bootmgfw.efi;
   then
-    echo "Fallback: Found Windows Boot Manager on (${root})."
+    echo "Fallback: Found Windows Boot Manager on (${user})."
     set fallback_os_type="windows"
     set fallback_root_device="${user}"
     set fallback_chainload_path="/efi/microsoft/boot/bootmgfw.efi"
   else
-    # Fallback 2: 搜索常见的 Linux GRUB 菜单
-    for cfg_path in /boot/grub/grub.cfg /boot/grub2/grub.cfg /grub/grub.cfg; do
-      if search --set=user -f -q  ${cfg_path};
+    # Fallback 2: 搜索常见的 Linux GRUB 启动文件
+    for boot_path in /efi/centos/grubx64.efi /boot/efi/EFI/ubuntu/grubx64.efi /boot/efi/EFI/debian/grubx64.efi; do
+      if search --set=user -f -q  ${boot_path};
       then
-        echo "Fallback: Found Linux boot menu at (${root})${cfg_path}."
+        echo "Fallback: Found Linux boot menu at (${user})${boot_path}."
         set fallback_os_type="linux"
         set fallback_root_device="${user}"
-        set fallback_config_file="${cfg_path}"
+        set fallback_boot_file="${boot_path}"
         break
       fi
     done
@@ -124,11 +124,11 @@ then
       }
     fi
     
-    if [ "${fallback_os_type}" = "linux" ]; then
-      menuentry "Load Linux Menu (found at ${fallback_root_device}${fallback_config_file})" {
+    if [ "${fallback_os_type}" = "linux Boot" ]; then
+      menuentry "Load Linux Menu (found at ${fallback_root_device}${fallback_boot_file})" {
         echo "Loading Linux menu in 3 seconds..."
         set root=${fallback_root_device}
-        configfile ${fallback_config_file}
+        chainloader ${fallback_boot_file}
       }
     fi
 

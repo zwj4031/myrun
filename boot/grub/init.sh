@@ -124,7 +124,7 @@ then
       }
     fi
     
-    if [ "${fallback_os_type}" = "linux Boot" ]; then
+    if [ "${fallback_os_type}" = "linux" ]; then
       menuentry "Load Linux Menu (found at ${fallback_root_device}${fallback_boot_file})" {
         echo "Loading Linux menu in 3 seconds..."
         set root=${fallback_root_device}

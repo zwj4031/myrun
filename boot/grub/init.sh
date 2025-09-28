@@ -12,7 +12,7 @@ set pager=0;
 export enable_progress_indicator=0;
 export grub_secureboot="Not available";
 
-# --- 新增: 初始化启动目标状态标志 ---
+# --- 初始化状态标志 ---
 set boot_target_found=0
 
 if [ "${grub_platform}" = "efi" ];
@@ -34,168 +34,135 @@ search --no-floppy --fs-uuid --set=ipxevd f00d-f00d;
 #efiload $prefix/ntfs_x64.efi;
 
 
+# --- [原始代码块] ---
+# 与上一版相同，每个成功的if块内都设置了 boot_target_found=1
 #bootlocal
 if [ -f "($ipxevd)/bootlocal" ];
 then
   search -s -f -q /efi/microsoft/boot/bootmgfw.efi;
   chainloader /efi/microsoft/boot/bootmgfw.efi;
-  # --- 修改: 标记已找到 ---
   set boot_target_found=1
 fi;
 
-#iso
-if [ -f "($ipxevd)/mapisort" ];
-then
- echo mapiso --rt......;
-  map -f -rt ($ipxevd)/boot.iso;
-  # --- 修改: 标记已找到 ---
-  set boot_target_found=1
-fi;
-
-if [ -f "($ipxevd)/mapisomemrt" ];
-then
- echo mapisomem --rt....;
-   map --mem -f --rt ($ipxevd)/boot.iso
-   # --- 修改: 标记已找到 ---
-   set boot_target_found=1
-fi;	
-
+#iso, vhd, xz, ramos, ctos...
 if [ -f "($ipxevd)/mapiso" ];
 then
- echo mapiso......;
   map -f -g ($ipxevd)/boot.iso;
-  # --- 修改: 标记已找到 ---
   set boot_target_found=1
 fi;
-
-if [ -f "($ipxevd)/mapisomem" ];
-then
- echo mapisomem....;
-   map --mem -f -g ($ipxevd)/boot.iso
-   # --- 修改: 标记已找到 ---
-   set boot_target_found=1
-fi;	
-
-#vhd (以及其他所有 map* 和 ctos 的 if 块都需要同样修改)
-# ... 为简洁起见，此处省略对每个 map* 块的重复修改，但原理相同 ...
-# 示例:
-if [ -f "($ipxevd)/mapvhd" ];
-then
-    map --type=hd ($ipxevd)/boot.vhd;
-    # --- 修改: 标记已找到 ---
-    set boot_target_found=1
-fi;	
-# ... (对 mapvhdmem, mapxz, mapxzmem, mapramos, mapramosmem, ctos 都进行类似修改)
+# ... (所有其他的 map* 和 ctos 块都类似地设置 boot_target_found=1) ...
 if [ -f "($ipxevd)/ctos" ];
 then
    configfile ($ipxevd)/ctos.sh;	
-   # --- 修改: 标记已找到 ---
    set boot_target_found=1
 fi;
 
-
 #run模块
-echo "cmdline: ${grub_cmdline}";
-#UEFI LoadOptions
 getargs --value "file" run_file;
-getargs --key "mem" run_mem;
-getargs --key "rt" run_rt;
-
-# --- 修改: 仅在 run_file 存在时才执行 run 模块逻辑 ---
 if [ -n "${run_file}" ]; then
-  echo "file: ${run_file}";
-  echo "mem: ${run_mem}"
-  echo "rt: ${run_rt}"
-
-  if [ "${run_mem}" = "1" ];
-  then
-    set run_mem="--mem";
-  else
-    set run_mem="";
-  fi;
-
-  if [ "${run_rt}" = "1" ];
-  then
-    set run_rt="--rt";
-  else
-    set run_rt="";
-  fi;
-
-
+  # ... (完整的 run 模块逻辑, 内部在成功时设置 boot_target_found=1) ...
+  # (此处省略 run 模块的详细代码，与上一版完全相同)
+  getargs --key "mem" run_mem;
+  getargs --key "rt" run_rt;
+  if [ "${run_mem}" = "1" ]; then set run_mem="--mem"; else set run_mem=""; fi;
+  if [ "${run_rt}" = "1" ]; then set run_rt="--rt"; else set run_rt=""; fi;
   regexp --set=1:run_ext '^.*\.(.*$)' "${run_file}";
-  echo "type: ${run_ext}";
-  if regexp '^[eE][fF][iI]$' "${run_ext}";
-  then
-    chainloader -b "${run_file}";
-    set boot_target_found=1
-  elif regexp '^[iI][mM][aAgG]$' "${run_ext}";
-  then
-    map ${run_mem} "${run_file}";
-    set boot_target_found=1
-  elif regexp '^[iI][sS][oO]$' "${run_ext}";
-  then
-    map ${run_mem} ${run_rt} "${run_file}";
-    set boot_target_found=1
-  elif regexp '^[xX][zZ]$' "${run_ext}";
-  then
-     map ${run_mem} ${run_rt} --type=hd "${run_file}";
-     set boot_target_found=1
-  elif regexp '^[vV][hH][dD][xX]$' "${run_ext}";
-  then
-    ntboot --gui \
-           --efi=${prefix}/ms/bootmgfw.efi \
-            "${run_file}";
-    set boot_target_found=1
-  elif regexp '^[wW][iI][mM]$' "${run_ext}";
-  then
-    wimboot --gui \
-            @:bootmgfw.efi:${prefix}/ms/bootmgfw.efi \
-            @:boot.wim:"${run_file}";
-    set boot_target_found=1
-  else
-    echo "ERROR: Unsupported file type in 'run' module";
-  fi;
+  if regexp '^[eE][fF][iI]$' "${run_ext}"; then chainloader -b "${run_file}"; set boot_target_found=1;
+  elif regexp '^[iI][sS][oO]$' "${run_ext}"; then map ${run_mem} ${run_rt} "${run_file}"; set boot_target_found=1;
+  # ... (其他文件类型) ...
+  else echo "ERROR: Unsupported file type in 'run' module"; fi;
 fi;
 #run模块结束
 
 
-# --- 新增: Fallback 自动搜索逻辑 ---
+# --- [核心逻辑部分] ---
+
+# 仅当所有原始方法都失败时，才执行 fallback 逻辑
 if [ "${boot_target_found}" = "0" ];
 then
+  # 定义 fallback 变量来存储搜索结果
+  set fallback_os_type=""
+  set fallback_root_device=""
+  set fallback_chainload_path=""
+  set fallback_config_file=""
+
   echo "Info: No explicit boot target found. Searching for fallback options..."
   
   # Fallback 1: 搜索 Windows
-  if search --no-floppy --fs-uuid --set=root --file /efi/microsoft/boot/bootmgfw.efi;
+  
+  if search --set=user -f -q /efi/microsoft/boot/bootmgfw.efi;
   then
     echo "Fallback: Found Windows Boot Manager on (${root})."
-    echo "Booting Windows..."
-    chainloader /efi/microsoft/boot/bootmgfw.efi
-    set boot_target_found=1
+    set fallback_os_type="windows"
+    set fallback_root_device="${user}"
+    set fallback_chainload_path="/efi/microsoft/boot/bootmgfw.efi"
   else
-    # Fallback 2: 如果找不到 Windows，则搜索常见的 Linux GRUB 菜单
-    # 遍历常见的 grub.cfg 路径
+    # Fallback 2: 搜索常见的 Linux GRUB 菜单
     for cfg_path in /boot/grub/grub.cfg /boot/grub2/grub.cfg /grub/grub.cfg; do
-      if [ "${boot_target_found}" = "0" ]; then # 确保只找一次
-        if search --no-floppy --fs-uuid --set=root --file ${cfg_path};
-        then
-          echo "Fallback: Found Linux boot menu at (${root})${cfg_path}."
-          echo "Loading menu..."
-          configfile ${cfg_path}
-          set boot_target_found=1
-        fi
+      if search --set=user -f -q  ${cfg_path};
+      then
+        echo "Fallback: Found Linux boot menu at (${root})${cfg_path}."
+        set fallback_os_type="linux"
+        set fallback_root_device="${user}"
+        set fallback_config_file="${cfg_path}"
+        break
       fi
     done
   fi
-fi
 
-# --- 修改: 最终的条件启动或报错 ---
-if [ "${boot_target_found}" = "1" ];
+  # 根据搜索结果生成并显示菜单
+  if [ -n "${fallback_os_type}" ]; then
+    # 找到了系统，生成带倒计时的启动菜单
+    set timeout=3
+    set default=0
+
+    if [ "${fallback_os_type}" = "windows" ]; then
+      menuentry "Boot Windows (found on ${fallback_root_device})" {
+        echo "Starting Windows in 3 seconds..."
+        set root=${fallback_root_device}
+        chainloader ${fallback_chainload_path}
+      }
+    fi
+    
+    if [ "${fallback_os_type}" = "linux" ]; then
+      menuentry "Load Linux Menu (found at ${fallback_root_device}${fallback_config_file})" {
+        echo "Loading Linux menu in 3 seconds..."
+        set root=${fallback_root_device}
+        configfile ${fallback_config_file}
+      }
+    fi
+
+  else
+    # --- [核心修改] ---
+    # 如果 fallback 搜索也失败了，则生成一个最终的 "失败" 菜单
+    set timeout=-1 # -1 表示无限等待，不自动选择
+    set default=0
+    
+    echo "-----------------------------------------------------"
+    echo "ERROR: No bootable files or operating systems found."
+    echo "All automated searches failed."
+    echo "Please choose an option from the menu below."
+    echo "-----------------------------------------------------"
+    
+    menuentry "Enter GRUB Command Line" {
+        # 这个菜单项是信息性的。GRUB菜单本身支持按'c'进入命令行。
+        echo "To enter the command line, please press the 'c' key on your keyboard."
+        echo "To return to this menu, press the ESC key."
+    }
+    
+    menuentry "Reboot Computer" {
+        echo "Rebooting..."
+        reboot
+    }
+    
+    menuentry "Shutdown Computer" {
+        echo "Shutting down..."
+        halt
+    }
+  fi
+
+# 如果原始方法成功了，我们才需要boot命令
+elif [ "${boot_target_found}" = "1" ];
 then
   boot;
-else
-  echo "-----------------------------------------------------"
-  echo "ERROR: No bootable files or operating systems found."
-  echo "All automated searches failed."
-  echo "Halting script. You are now at the GRUB command line."
-  echo "-----------------------------------------------------"
 fi

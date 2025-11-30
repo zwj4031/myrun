@@ -98,7 +98,7 @@ then
     set fallback_chainload_path="/efi/microsoft/boot/bootmgfw.efi"
   else
     # Fallback 2: 搜索常见的 Linux GRUB 启动文件
-    for boot_path in /efi/centos/grubx64.efi /boot/efi/ubuntu/grubx64.efi /boot/efi/debian/grubx64.efi /boot/EFI/debian/grubx64.efi /boot/EFI/debian/shimx64.efi /boot/efi/debian/shimx64.efi; do
+    for boot_path in /efi/centos/grubx64.efi /boot/efi/ubuntu/grubx64.efi /efi/ubuntu/grubx64.efi /boot/efi/debian/grubx64.efi /EFI/debian/grubx64.efi /boot/EFI/debian/shimx64.efi /EFI/debian/shimx64.efi; do
       if search --set=user -f -q  ${boot_path};
       then
         echo "Fallback: Found Linux boot menu at (${user})${boot_path}."
@@ -144,7 +144,7 @@ then
     echo "Please choose an option from the menu below."
     echo "-----------------------------------------------------"
     
-    menuentry "Enter GRUB Command Line" {
+    menuentry "Enter GRUB Command Line 20251130" {
         # 这个菜单项是信息性的。GRUB菜单本身支持按'c'进入命令行。
         echo "To enter the command line, please press the 'c' key on your keyboard."
         echo "To return to this menu, press the ESC key."

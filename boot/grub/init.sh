@@ -98,7 +98,7 @@ then
     set fallback_chainload_path="/efi/microsoft/boot/bootmgfw.efi"
   else
     # Fallback 2: 搜索常见的 Linux GRUB 启动文件
-    for boot_path in /efi/centos/grubx64.efi /boot/efi/ubuntu/grubx64.efi /boot/efi/debian/grubx64.efi; do
+    for boot_path in /efi/centos/grubx64.efi /boot/efi/ubuntu/grubx64.efi /boot/efi/debian/grubx64.efi /boot/EFI/debian/grubx64.efi /boot/EFI/debian/shimx64.efi /boot/efi/debian/shimx64.efi; do
       if search --set=user -f -q  ${boot_path};
       then
         echo "Fallback: Found Linux boot menu at (${user})${boot_path}."
